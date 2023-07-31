@@ -18,11 +18,14 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 
-router=DefaultRouter()
-# router.register(user,views.)  
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/user/',include(router.urls)) 
+    path('api/',include('user.urls')),
+    path('api/',include('products.urls')),
+    
+
 
 ]
