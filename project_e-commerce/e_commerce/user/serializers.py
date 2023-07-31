@@ -15,7 +15,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
            ]
        
 
-
+class UserAddressSerializer(serializers.ModelSerializer):
+      
+      class Meta:
+            
+       model=Useraddress
+       fields='__all__'
+       read_only_fields=['created_at','updated_at']      
 
 
 
