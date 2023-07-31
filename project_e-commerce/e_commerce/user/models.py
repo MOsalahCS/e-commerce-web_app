@@ -4,15 +4,17 @@ import datetime
 from django_countries.fields import CountryField
 
 # Create your models here.
-#mhd
+#user model
 User=get_user_model()
-
+#user profile with ordering meta
 class UserProfile(models.Model):
     user=models.OneToOneField(User,related_name='profile', on_delete=models.CASCADE)
     avatar=models.ImageField()
     bio=models.CharField(max_length=200,null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering=('-created_at')
 
 
     def __str__(self):
@@ -20,7 +22,7 @@ class UserProfile(models.Model):
     
 
 
-
+#user address with ordering meta
 class Useraddress(models.Model):
     BILLING='B'
     SHIPPING ='S'
@@ -33,6 +35,8 @@ class Useraddress(models.Model):
     postal_code=models.CharField( max_length=10)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering=('-created_at')
     def __str__(self) :
         return self.user
 
