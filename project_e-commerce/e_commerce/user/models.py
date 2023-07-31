@@ -18,7 +18,7 @@ class UserProfile(models.Model):
 
 
     def __str__(self):
-        return self.user
+        return self.user.get_username()
     
 
 
@@ -38,7 +38,7 @@ class Useraddress(models.Model):
     class Meta:
         ordering=('-created_at')
     def __str__(self) :
-        return self.user
+        return self.user.get_username()
 
 
 
