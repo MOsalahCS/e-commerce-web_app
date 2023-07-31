@@ -25,7 +25,7 @@ class Useraddress(models.Model):
     BILLING='B'
     SHIPPING ='S'
     ADDRESS_TYPE=[ BILLING, SHIPPING]
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     city=models.CharField(max_length=100)
     country=CountryField()
     street_address=models.CharField(max_length=100)
