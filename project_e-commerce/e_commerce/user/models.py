@@ -103,7 +103,7 @@ class OTPToken(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username}: {self.token}"
+        return f"{self.user.name}: {self.token}"
 
     
 
