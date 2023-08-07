@@ -2,13 +2,29 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.status import HTTP_201_CREATED 
+from rest_framework.generics import GenericAPIView
+from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from .otp_utils import *
 from .models import * 
-from .serializers import UserProfileSerializer,UserAddressSerializer,UserSerializer,UserLoginSerializer
+from .serializers import (
+    UserProfileSerializer, 
+    UserAddressSerializer,
+    UserSerializer,UserLoginSerializer
+    
+    )
 
-class RegisterAPI(APIView):
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
+
+
+class RegisterAPI(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class=UserSerializer
+
     def post(self,request):
         
             data=request.data
@@ -22,7 +38,7 @@ class RegisterAPI(APIView):
                  user.save()
                       
                  return Response(
-                         serializer.data,status=HTTP_201_CREATED
+                         serializer.data,status=status.HTTP_201_CREATED
                         )
             return Response(serializer.errors)
             
@@ -32,22 +48,38 @@ class RegisterAPI(APIView):
 
 
 
-# class LoginAPI(APIView):
-#         def post(self,request):
-#                 username=request.data['username']
-#                 password=request.data['password']
-                  
-#                 user=User.objects.get(username=username,password=password)
-#                 if user is None:
-#                      raise AuthenticationFailed('No')
-                
-#                 return Response({'message':'Loged In'})
+class UserLoginAPIView(GenericAPIView):
+    
+
+    permission_classes = (AllowAny,)
+    serializer_class = UserLoginSerializer
+    
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = CustomUser.objects.get(email=request.data['email'])
+        serializer = UserSerializer(user)
+        token = RefreshToken.for_user(user)
+        data = serializer.data
+        data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
+        return Response(data, status=status.HTTP_200_OK)
 
 
 
+class UserLogoutAPIView(GenericAPIView):
+   
+    permission_classes=(IsAuthenticated,)
+    
 
-
-
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserViewList(APIView):
     def get(self , request):
