@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'dj_rest_auth',
 
     'rest_framework_simplejwt',
     
@@ -140,26 +141,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.AllowAny',],
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
         
+
+        'rest_framework.authentication.SessionAuthentication',
+        
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+
+
     )
     
 }
 
 
-SIMPLE_JWT={
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "JTI_CLAIM": "jti",
-    
+
     
 
 
-}
+
 
 
 AUTH_USER_MODEL='user.CustomUser'
@@ -170,3 +172,7 @@ AUTH_USER_MODEL='user.CustomUser'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+SIMPLE_JWT={
+    'AUTH_HEADER_TYPES':('Bearer',) 
+}

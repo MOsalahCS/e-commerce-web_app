@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated,IsAdminUser,DjangoModelPermissions
+from rest_framework.authentication import get_authorization_header
 
 from .otp_utils import *
 from .models import * 
@@ -16,9 +17,8 @@ from .serializers import (
     
     )
 
-from rest_framework_simplejwt.tokens import RefreshToken
-
-
+from .authentication import *
+from .permissions import *
 
 
 class RegisterAPI(GenericAPIView):
@@ -60,43 +60,85 @@ class UserLoginAPIView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = CustomUser.objects.get(email=request.data['email'])
         serializer = UserSerializer(user)
-        token = RefreshToken.for_user(user)
-        data = serializer.data
-        data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
-        return Response(data, status=status.HTTP_200_OK)
+        access_token=create_access_token(user.id)
+        refresh_token=create_refresh_token(user.id)
+
+        response=Response()
+
+        response.set_cookie(key='refreshToken',value=refresh_token,httponly=True)
+        response.data={
+          'token':access_token
 
 
+        }
+        
+
+        return response
 
 class UserLogoutAPIView(GenericAPIView):
    
-    permission_classes=(IsAuthenticated,)
+    permission_classes=()
     
 
     def post(self, request, *args, **kwargs):
-        try:
-            refresh_token = request.data["refresh"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+         response=Response()
+         response.delete_cookie('jwt')
+         response.data={
+             'message':'success'
+         }
+         return response
+    
+class UserViewList(viewsets.GenericViewSet):
+    authentication_classes=[]
+    serializer_class=UserSerializer
+    queryset=CustomUser.objects.all()   
+    
+    def get_queryset(self):
+        header=get_authorization_header(self.request)
+        return 
+    
+class UserListView(APIView):
+    
+    
+    def get(self, request):
+        if CustomUser.is_staff and CustomUser.is_superuser :
+         auth=get_authorization_header(request).split()
+         if auth and len(auth)== 2:
+            token=auth[1].decode('utf-8')
+            decode_access_token(token) 
 
-class UserViewList(APIView):
-    def get(self , request):
-     try :
-          users = CustomUser.objects.all()
-          
-          serializer = UserSerializer(users,many=True)
-           
-          return Response(serializer.data)
+            qs=CustomUser.objects.all()
+            serializer=UserSerializer(qs,many=True)
+
+            return Response(serializer.data)
+        else:
+            raise AuthenticationFailed('unauthenticated')
+
+class UserApiView(APIView):
+    def get(self, request):
+        auth=get_authorization_header(request).split()
+        if auth and len(auth)== 2:
+            token=auth[1].decode('utf-8')
+            id=decode_access_token(token)
+
+            user=CustomUser.objects.filter(pk=id).last()
+
+            return Response(UserSerializer(user).data)
+        raise AuthenticationFailed('unauthenticated')
+
         
-     except:
-         return Response({"Error":"Not Found"},status=404)
+
+    
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
+    
+
     queryset=UserProfile.objects.all()
     serializer_class=UserProfileSerializer
+    
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 class UserAddressViewSet(viewsets.ModelViewSet):
     queryset=Useraddress.objects.all()

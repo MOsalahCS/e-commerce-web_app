@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 # Create your models here.
 from django.db import models
-from django.contrib.auth.models import AbstractUser,BaseUserManager #user model
+from django.contrib.auth.models import AbstractUser,BaseUserManager,PermissionsMixin #user model
 import datetime
 from django_countries.fields import CountryField
 import secrets
@@ -38,12 +38,15 @@ class UserManager(BaseUserManager):
 
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser,PermissionsMixin):
 
     username=None
     name=models.CharField(max_length=255)
     email=models.CharField(max_length=255,unique=True)
     password=models.CharField(max_length=255)
+    is_staff=models.BooleanField(default=False)
+    is_active=models.BooleanField(default=True)
+    
 
     objects=UserManager()
    

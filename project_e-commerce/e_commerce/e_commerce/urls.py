@@ -32,10 +32,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('user.urls')),
     path('api/',include('products.urls')),
+    path('api-auth/',include('rest_framework.urls')),  
     
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+]
 
 
- ]
+ 
 # if settings.DEBUG:
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
