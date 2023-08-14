@@ -98,21 +98,24 @@ class UserViewList(viewsets.GenericViewSet):
         return 
     
 class UserListView(APIView):
-    
+    permission_classes=[]
     
     def get(self, request):
-        if CustomUser.is_staff and CustomUser.is_superuser :
-         auth=get_authorization_header(request).split()
-         if auth and len(auth)== 2:
+        
+        
+        auth=get_authorization_header(request).split()
+        if auth and len(auth)== 2:
             token=auth[1].decode('utf-8')
             decode_access_token(token) 
+            if CustomUser.is_superuser:
 
-            qs=CustomUser.objects.all()
-            serializer=UserSerializer(qs,many=True)
+             qs=CustomUser.objects.all()
+             serializer=UserSerializer(qs,many=True)
 
-            return Response(serializer.data)
-        else:
-            raise AuthenticationFailed('unauthenticated')
+             return Response(serializer.data)
+                   
+        
+        raise AuthenticationFailed('unauthenticated')
 
 class UserApiView(APIView):
     def get(self, request):
@@ -165,8 +168,3 @@ def verify_otp_api(request):
     except CustomUser.DoesNotExist:
         return Response({'message': 'User not found'}, status=400)
     
-    
-
-    
-
-

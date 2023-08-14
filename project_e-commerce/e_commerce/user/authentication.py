@@ -2,11 +2,14 @@ import jwt, datetime
 from rest_framework import exceptions
 
 def create_access_token(id):
-    return jwt.encode({
+    return jwt.encode(
+         {         
         'user_id': id,
+    
         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100),
         'iat': datetime.datetime.utcnow()
-    }, 'access_secret', algorithm='HS256')
+    
+},      'access_secret', algorithm='HS256')
 
 def decode_access_token(token):
     try:
