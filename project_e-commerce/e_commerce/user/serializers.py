@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
-
+from django_countries.serializers import CountryFieldMixin
 
 class UserSerializer(serializers.ModelSerializer):
     
@@ -82,3 +82,22 @@ class VerifyUser_EmailSerialzier(serializers.Serializer):
         queryset.check_verification(security_code=otp)
 
         return validated_data
+
+class ShippingAndBillingAddressSerializer(CountryFieldMixin,serializers.ModelSerializer):
+
+ user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+ class meta:
+      model = Useraddress
+      fields = '__all__'
+      read_only_fields = ('address_type', )
+
+ def to_representationBilling(self,instance):
+  representation = super().to_representation(instance)
+  representation['address_type'] = 'B'
+  return representation
+ 
+ def to_representationShipping(self,instance):
+     representation = super().to_representation(instance)
+     representation['address_type']='S'
+     return representation
