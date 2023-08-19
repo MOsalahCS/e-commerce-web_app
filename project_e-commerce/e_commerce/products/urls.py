@@ -1,10 +1,11 @@
-from rest_framework.routers import DefaultRouter
 from django.urls import path,include
+from .views import *
 
-router=DefaultRouter()  
-# router.register('products',)
 
 urlpatterns = [
-    path('',include(router.urls))
+    path('products/',ProductsList.as_view()),
+    path('products/create/',ProductCreate.as_view()),
+    path('products/update/<int:pk>/',ProductDetail.as_view(),),
+
     
 ]
