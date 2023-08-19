@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     #internal apps
     'products',
     'user',
+    'order',
 
 ]
 
@@ -142,11 +143,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticatedOrReadOnly',],
+    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated',],
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
                
-              
+        #    'rest_framework.authentication.JsonWebTokenAuthentication',     
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         

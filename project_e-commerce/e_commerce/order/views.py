@@ -1,39 +1,24 @@
+from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from .models import *   
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
-from rest_framework.permissions import IsAdminUser,AllowAny
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 from user.authentication import *
 from .serializers import *
-# from user.permissions import CustomPermission
-
-class ProductsList(generics.ListAPIView):
 
 
- 
-    queryset=Products.objects.all()
-    serializer_class=ProductSerializer
-    
-
-     
-    def list(self,request):
-        
-            queryset = self.filter_queryset(self.get_queryset())
-        
-            serializer = ProductSerializer(queryset, many=True)
-            return Response(serializer.data)
-           
 
 
-class ProductCreate(generics.CreateAPIView):
+
+class OrderCreate(generics.CreateAPIView):
       permission_classes = ()
  
       authentication_classes=()
-      queryset=Products.objects.all() 
-      serializer_class=ProductSerializer
+      queryset=Orders.objects.all() 
+      serializer_class=OrderswriteSerializer
       
       
       def get_permissions(self):
@@ -51,12 +36,27 @@ class ProductCreate(generics.CreateAPIView):
       def perform_create(self, serializer):
           return serializer.save()
       
+
+class OrdersList(generics.ListAPIView):
+
+
+ 
+    queryset=Orders.objects.all()
+    serializer_class=OrdersreadSerializer
+    
+
+     
+    def list(self,request):
         
+            queryset = self.filter_queryset(self.get_queryset())
         
-       
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset=Products.objects.all()
-    serializer_class=ProductSerializer
+            serializer = OrdersreadSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+
+class OrdersDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset=Orders.objects.all()
+    serializer_class=OrderswriteSerializer
     lookup_field='pk'
     permission_classes=[]
 
@@ -68,9 +68,9 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
             if auth and len(auth)== 2:
                 token=auth[1].decode('utf-8')
                 decode_access_token(token) 
-                product=get_object_or_404(Products.objects.all(),id=pk)
+                product=get_object_or_404(Orders.objects.all(),id=pk)
                 data=request.data
-                serializer=ProductSerializer(instance=product,data=data,partial=True)
+                serializer=OrderswriteSerializer(instance=product,data=data,partial=True)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
                 return Response({'succsess':'updated successfully'})
@@ -80,19 +80,8 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
           if auth and len(auth)== 2:
                 token=auth[1].decode('utf-8')
                 decode_access_token(token) 
-                product=get_object_or_404(Products.objects.all(),id=pk)
+                order=get_object_or_404(Orders.objects.all(),id=pk)
                 
-                product.delete()
+                order.delete()
                 return Response({'detail':'product deleted successfully'})
           raise AuthenticationFailed('not authed')
-
-            
-        
-
-    
-    
-   
-            
-           
-        
-        

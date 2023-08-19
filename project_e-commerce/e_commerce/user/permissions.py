@@ -1,27 +1,12 @@
-from rest_framework import permissions
+# # permissions.py or your views module
+# from rest_framework.permissions import BasePermission
+# from .authentication import decode_jwtandgetheader
 
-
-class IsAdminOrStaffOrReadOnly(permissions.DjangoModelPermissions):
-    def has_permission(self, request, view):
-
-        if request.user.is_authenticated:
-            return True
+# class CustomPermission(BasePermission):
+#     def has_permission(self, request, view):
+#         permissions = decode_jwtandgetheader(request)
+#         if permissions is None:
+#             return False  # Token is invalid or expired
         
-
-
-    def has_object_permission(self, request, view, obj):
-
-        if request.user.is_superuser:
-            return True
-
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        if obj.user == request.user:
-            return True
-
-        if request.user.is_staff and request.method not in self.edit_methods:
-            return True
-
-        return False  
-            
+#         required_permission = view.required_permission
+#         return required_permission in permissions
