@@ -44,16 +44,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
-
     'rest_framework_simplejwt',
     
 
 
 
     #internal apps
-    'products',
     'user',
+    'products',
     'order',
+    'payment',
 
 ]
 
