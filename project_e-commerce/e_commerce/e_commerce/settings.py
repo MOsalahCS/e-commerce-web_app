@@ -14,15 +14,16 @@ from pathlib import Path
 import os
 
 from django.conf import settings
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-m^@2ok2p9!z&dflzvn4z9tc(w00)&-nv*)r0bb+sg-slu$7a^#'
+#STRIPE KEYS
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51Nhw82KWxBgHdaqJr5ITQUDx3nbwvrXA6dHKrVJi9CLvy2g0SuVIQyrLw8zjC2a8UYWxlR5PgEDnlkXs5Bqp5hU800X1TArV47'
+STRIPE_SECRET_KEY = 'sk_test_51Nhw82KWxBgHdaqJNwn2S4sRWpyjVXwhd2yHiG0QexjWaGHAca5TMufalmHn3kV3nJWbzK8VZlmFQYo13DkkHXsv001tXuX69J'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -89,7 +90,6 @@ WSGI_APPLICATION = 'e_commerce.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -100,7 +100,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -119,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -131,12 +131,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
+
 
 STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
 MEDIA_ROOT=os.path.join(BASE_DIR,'./media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
                
-        #    'rest_framework.authentication.JsonWebTokenAuthentication',     
+            
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         

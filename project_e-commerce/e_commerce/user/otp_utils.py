@@ -7,13 +7,13 @@ from django.http import HttpResponseBadRequest
 from rest_framework.response import Response
 
 def generate_key():
-    # Generate a random 20-byte key and encode it in base32
+  
     random_bytes = secrets.token_bytes(20)
     base32_key = base64.b32encode(random_bytes).decode()
     return base32_key
 
 def send_otp_email(user):
-    otp_token = pyotp.TOTP(generate_key(), interval=300)  # Generate 6-digit OTP valid for 5 minutes
+    otp_token = pyotp.TOTP(generate_key(), interval=300)  
     otp = otp_token.now()
     OTPToken.objects.create(user=user, token=otp)
 
@@ -29,7 +29,7 @@ def verify_otp(user, otp):
     try:
 
         if otp_token and otp_token.token == otp:
-        # OTP is valid, perform your desired action here (e.g., log in the user)
+       
             return True
     except:
             return HttpResponseBadRequest

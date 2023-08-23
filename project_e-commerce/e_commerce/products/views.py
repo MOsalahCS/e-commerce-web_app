@@ -8,7 +8,7 @@ from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 from user.authentication import *
 from .serializers import *
-# from user.permissions import CustomPermission
+
 
 class ProductsList(generics.ListAPIView):
 

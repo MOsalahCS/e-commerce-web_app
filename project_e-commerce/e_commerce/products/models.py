@@ -28,7 +28,6 @@ def get_default_product_category():
 
 
 class Products(models.Model):
-    # seller=models.ForeignKey(User,on_delete=models.CASCADE)
     category=models.ForeignKey('ProductCategory',on_delete=models.SET(get_default_product_category))
     name=models.CharField(max_length=200)
     description=models.TextField(blank=True)

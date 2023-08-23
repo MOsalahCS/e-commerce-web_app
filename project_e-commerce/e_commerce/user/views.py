@@ -149,7 +149,6 @@ class UserAddressViewSet(viewsets.ModelViewSet):
 
    
 
-# print()
 
 @api_view(['POST'])
 def verify_otp_api(request):

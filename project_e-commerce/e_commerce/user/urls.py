@@ -5,7 +5,6 @@ from .views import (
     UserAddressViewSet,
     verify_otp_api,
     RegisterAPI,
-    # UserViewList,
     UserLoginAPIView,
     UserLogoutAPIView,
     UserApiView,
@@ -24,7 +23,7 @@ from .otp_utils import *
 router=DefaultRouter()
 router.register('user',UserProfileViewSet)
 router.register('user-address',UserAddressViewSet)
-# router.register('user-list',UserViewList)
+
 
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

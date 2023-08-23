@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser,BaseUserManager,PermissionsM
 import datetime
 from django_countries.fields import CountryField
 import secrets
-# Create your models here.
+
 
 # Custom User Model
 
@@ -112,11 +112,11 @@ class OTPToken(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def generate_token(self):
-        # Generate a random 6-digit OTP token
+        
         return secrets.randbelow(1000000)
 
     def save(self, *args, **kwargs):
-        # Generate and save a new OTP token before saving the object
+       
         self.token = self.generate_token()
         super().save(*args, **kwargs)
 

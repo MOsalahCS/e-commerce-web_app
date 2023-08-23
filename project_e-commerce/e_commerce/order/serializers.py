@@ -51,16 +51,5 @@ class OrderswriteSerializer(serializers.ModelSerializer):
 
         return order
     
-    # def update(self, instance, validated_data):
-    #     orders_data = validated_data.pop('order_items', None)
-    #     orders = list((instance.order_items).all())
-    #     if orders_data:
-    #         for order_data in orders_data:
-    #             order = orders.pop(0)
-    #             order.product = order_data.get('product', order.product)
-    #             order.quantity = order_data.get('quantity', order.quantity)
-    #             order.save()
-
-    #     return instance
-
+   
 

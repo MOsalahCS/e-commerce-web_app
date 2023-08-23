@@ -10,6 +10,7 @@ class Orders(models.Model):
 
    clinet = models.ForeignKey(CustomUser, related_name='orders', on_delete=models.CASCADE)
    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
+   payment_status = models.BooleanField(default=False)
    shipping_address = models.ForeignKey(Useraddress, related_name='shipping_orders', on_delete=models.SET_NULL, blank=True, null=True)
    billing_address = models.ForeignKey( Useraddress, related_name='billing_orders', on_delete=models.SET_NULL, blank=True, null=True)
 
