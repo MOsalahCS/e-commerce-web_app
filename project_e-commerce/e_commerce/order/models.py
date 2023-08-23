@@ -9,7 +9,7 @@ class Orders(models.Model):
    STATUS_CHOICES = ((PENDING, ('pending')), (COMPLETED, ('completed')))
 
    clinet = models.ForeignKey(CustomUser, related_name='orders', on_delete=models.CASCADE)
-#    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
+   status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
    shipping_address = models.ForeignKey(Useraddress, related_name='shipping_orders', on_delete=models.SET_NULL, blank=True, null=True)
    billing_address = models.ForeignKey( Useraddress, related_name='billing_orders', on_delete=models.SET_NULL, blank=True, null=True)
 
@@ -20,7 +20,7 @@ class Orders(models.Model):
         ordering = ['created_at',]
 
    def __str__(self):
-     self.clinet.get_full_name()
+     return self.clinet.email
 
    def total_cost(self):
         return round(sum([order_item.cost for order_item in self.order_items.all()]), 2)
@@ -40,7 +40,9 @@ class OrderItem(models.Model):
        ordering = ['created_at',]
 
     def __str__(self):   
-        self.order.clinet.get_full_name()
+        x=str(self.product)
+
+        return x
 
     def cost(self):
         return round(self.quantity * self.product.price, 2)

@@ -103,7 +103,7 @@ class Useraddress(models.Model):
     class Meta:
         ordering=['-created_at']
     def __str__(self) :
-        return self.user.get_username()
+        return self.city
 
 
 class OTPToken(models.Model):

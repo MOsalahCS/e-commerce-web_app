@@ -1,6 +1,5 @@
 import jwt, datetime
 from rest_framework import exceptions
-from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework.authentication import get_authorization_header
 from .models import CustomUser
 def create_access_token(id):
