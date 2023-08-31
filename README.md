@@ -1,5 +1,3 @@
 # e-commerce-web_app
-## Documentation:
+## a functional project written in python using django framework and creating a restful API using django rest framework 
 
-### 1. https://docs.djangoproject.com/en/4.2/ 
-### 2. https://www.django-rest-framework.org/
